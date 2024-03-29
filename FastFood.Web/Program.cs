@@ -8,8 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+var conString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection");
+
 builder.Services.AddDbContext<ApplicationDBContext>(option => 
-option.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationDbContextConnection")));
+option.UseSqlServer(conString));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders().AddEntityFrameworkStores<ApplicationDBContext>();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 //builder.Services.AddScoped<IEmailSender, EmailSender>();
@@ -32,6 +34,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
 	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}");
+	pattern: "{area=admin}/{controller=categories}/{action=Index}/{id?}");
 
 app.Run();
